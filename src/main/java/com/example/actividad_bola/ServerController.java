@@ -18,27 +18,17 @@ public class ServerController {
 
     @FXML
     private Label textToast;
-
     @FXML
     private ImageView imageBola;
+    @FXML
+    private Thread hiloBola;
 
-    InputStream inputstream;
-
-    {
-        try {
-            inputstream = new FileInputStream("/home/mballesterosv/ProgramacionServiciosProcesos/src/Actividad_Bola/ball.png");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    Image ballImage = new Image(inputstream);
 
     @FXML
     protected void onStartButtonClick() {
-        imageBola.autosize();
-        imageBola.setImage(ballImage);
-        //move(imageBola);
+        hiloBola = new Thread(new Ball(imageBola));
+        hiloBola.start();
+
     }
 
     private void move(ImageView imageBola) {
