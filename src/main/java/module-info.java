@@ -12,4 +12,6 @@ module com.example.actividad_bola {
     exports com.example.actividad_bola.Elementos;
     opens com.example.actividad_bola.Elementos to javafx.fxml;
     exports com.example.actividad_bola;
+    exports com.example.actividad_bola.Cliente;
+    opens com.example.actividad_bola.Cliente to javafx.fxml;
 }
