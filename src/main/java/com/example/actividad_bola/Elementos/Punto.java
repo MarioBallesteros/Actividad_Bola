@@ -1,4 +1,4 @@
-package com.example.actividad_bola;
+package com.example.actividad_bola.Elementos;
 
 public class Punto {
     double x;
