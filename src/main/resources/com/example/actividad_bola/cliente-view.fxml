@@ -4,12 +4,26 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.actividad_bola.Servidor.ServerController">
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<Pane prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.actividad_bola.Cliente.ClienteController">
   <padding>
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
   </padding>
   <ImageView id="imageBola" fx:id="imageBola" fitHeight="30.0" fitWidth="30.0" layoutX="272.0" layoutY="231.0" pickOnBounds="true" preserveRatio="true">
     <Image url="@ball.png" />
   </ImageView>
+  <VBox alignment="CENTER" spacing="10">
+    <HBox spacing="10">
+      <Label text="IP: " />
+      <TextField fx:id="ipTextField" />
+    </HBox>
+    <HBox spacing="10">
+      <Label text="Puerto: " />
+      <TextField fx:id="portTextField" />
+    </HBox>
+    <Button text="Connect" onAction="#onConnectButtonClick" />
+  </VBox>
 
 </Pane>

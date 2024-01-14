@@ -7,22 +7,35 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Server extends Task<Void> {
     private final static int MAX_BYTES = 1500;
     private final static String COD_TEXTO = "UTF-8";
-    private final int numPuerto;
-    private final List<Cliente> clientes;
 
-    public Server(int numPuerto, List<Cliente> clientes) {
+    private int numPuerto;
+    private List<Cliente> clientes;
+    private DatagramSocket serverSocket;
+    private ServerController serverController;
+
+    public Server(int numPuerto){
         this.numPuerto = numPuerto;
+        this.clientes = new ArrayList<>();
+    }
+
+    public void setNumPuerto(int numPuerto) {
+        this.numPuerto = numPuerto;
+    }
+
+    public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
 
     @Override
     protected Void call() {
-        try (DatagramSocket serverSocket = new DatagramSocket(numPuerto)) {
+        try {
+            serverSocket = new DatagramSocket(numPuerto);
             System.out.printf("Creado socket de datagramas para puerto %s.\n", numPuerto);
 
             while (!isCancelled()) {
@@ -37,13 +50,42 @@ public class Server extends Task<Void> {
 
                 System.out.printf("Recibido datagrama de %s:%d (%s)\n", IPCliente.getHostAddress(), puertoCliente, mensaje);
 
+                Cliente cliente = new Cliente(IPCliente.getHostAddress(), puertoCliente);
+                clientes.add(cliente);
 
+                onClientConnected(cliente);
             }
         } catch (IOException ex) {
             System.out.println("Excepción de E/S en el servidor UDP");
             ex.printStackTrace();
+        } finally {
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                serverSocket.close();
+            }
         }
 
         return null;
+    }
+
+    public void onClientConnected(Cliente cliente) {
+        System.out.println("Nuevo cliente conectado: " + cliente.getMessage());
+    }
+
+    public void addCliente(Cliente cliente) {
+        clientes.add(cliente);
+    }
+    public void enviarPosicionPelota(double posX, double posY) {
+        if (clientes == null){
+            clientes = new ArrayList<>();
+        }
+        for (Cliente cliente : clientes) {
+
+            cliente.getClienteController().recibirPosicionPelota(posX,posY);
+        }
+    }
+
+
+    public void setServerController(ServerController serverController) {
+        this.serverController = serverController;
     }
 }
