@@ -29,7 +29,9 @@ public class Cliente extends Task<Void> {
     protected Void call() {
         try {
             clientSocket = new DatagramSocket();
-            System.out.printf("Creado socket de datagramas para puerto %s.\n");
+            System.out.printf("Creado socket de datagramas para puerto %s.\n", numPuerto);
+
+            enviarMensajeAlServidor("hola",hostAddress,numPuerto);
 
             while (true) {
                 byte[] datosRecibidos = new byte[MAX_BYTES];
@@ -43,12 +45,14 @@ public class Cliente extends Task<Void> {
 
                 System.out.printf("Recibido datagrama de %s:%d (%s)\n", IPCliente.getHostAddress(), puertoCliente, mensaje);
 
-// Parsea el mensaje para obtener las coordenadas (ejemplo)
+                if (!clienteYaConectado(IPCliente.getHostAddress(), puertoCliente)) {
+                    System.out.printf("¡Hola! Nuevo cliente conectado desde %s:%d\n", IPCliente.getHostAddress(), puertoCliente);
+                }
+
                 String[] coordenadas = mensaje.split(",");
                 double posX = Double.parseDouble(coordenadas[0]);
                 double posY = Double.parseDouble(coordenadas[1]);
 
-// Notifica al controlador de la interfaz del cliente
                 Platform.runLater(() -> clienteController.recibirPosicionPelota(posX, posY));
             }
         } catch (IOException ex) {
@@ -63,12 +67,13 @@ public class Cliente extends Task<Void> {
         return null;
     }
 
-    private void onClientConnected(String hostAddress, int puerto) {
-        System.out.println("Cliente conectado: " + hostAddress);
+    private boolean clienteYaConectado(String hostAddress, int puerto) {
+        return false;
     }
 
-    public void enviarMensajeAlServidor(String mensaje, InetAddress servidorAddress, int servidorPuerto) {
+    public void enviarMensajeAlServidor(String mensaje, String servidorIP, int servidorPuerto) {
         try {
+            InetAddress servidorAddress = InetAddress.getByName(servidorIP);
             byte[] bMensaje = mensaje.getBytes(COD_TEXTO);
             DatagramPacket paqueteMensaje = new DatagramPacket(bMensaje, bMensaje.length, servidorAddress, servidorPuerto);
             clientSocket.send(paqueteMensaje);
@@ -77,6 +82,7 @@ public class Cliente extends Task<Void> {
             e.printStackTrace();
         }
     }
+
 
     public void setClienteController(ClienteController clienteController) {
         this.clienteController = clienteController;

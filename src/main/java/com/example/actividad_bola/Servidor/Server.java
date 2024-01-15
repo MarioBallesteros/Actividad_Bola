@@ -36,34 +36,25 @@ public class Server extends Task<Void> {
     protected Void call() {
         try {
             serverSocket = new DatagramSocket(numPuerto);
-            System.out.printf("Creado socket de datagramas para puerto %s.\n", numPuerto);
+            System.out.printf("Creando Servidor para puerto %s.\n", numPuerto);
 
-            while (!isCancelled()) {
                 byte[] datosRecibidos = new byte[MAX_BYTES];
                 DatagramPacket paqueteRecibido = new DatagramPacket(datosRecibidos, datosRecibidos.length);
 
                 serverSocket.receive(paqueteRecibido);
 
-                String mensaje = new String(paqueteRecibido.getData(), 0, paqueteRecibido.getLength(), COD_TEXTO);
                 InetAddress IPCliente = paqueteRecibido.getAddress();
                 int puertoCliente = paqueteRecibido.getPort();
 
-                System.out.printf("Recibido datagrama de %s:%d (%s)\n", IPCliente.getHostAddress(), puertoCliente, mensaje);
-
+                System.out.printf("Recibido nuevo cliente: %s:%d\n", IPCliente.getHostAddress(), puertoCliente);
                 Cliente cliente = new Cliente(IPCliente.getHostAddress(), puertoCliente);
                 clientes.add(cliente);
 
                 onClientConnected(cliente);
-            }
         } catch (IOException ex) {
             System.out.println("Excepción de E/S en el servidor UDP");
             ex.printStackTrace();
-        } finally {
-            if (serverSocket != null && !serverSocket.isClosed()) {
-                serverSocket.close();
-            }
         }
-
         return null;
     }
 
@@ -75,11 +66,7 @@ public class Server extends Task<Void> {
         clientes.add(cliente);
     }
     public void enviarPosicionPelota(double posX, double posY) {
-        if (clientes == null){
-            clientes = new ArrayList<>();
-        }
         for (Cliente cliente : clientes) {
-
             cliente.getClienteController().recibirPosicionPelota(posX,posY);
         }
     }

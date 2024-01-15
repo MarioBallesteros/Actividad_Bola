@@ -1,5 +1,6 @@
 package com.example.actividad_bola.Cliente;
 
+import com.example.actividad_bola.Elementos.Ball;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -15,6 +16,7 @@ public class ClienteController {
 
     @FXML
     private ImageView imageBola;
+    private Ball bola;
 
     @FXML
     private TextField ipTextField;
@@ -31,22 +33,26 @@ public class ClienteController {
     private Cliente udpCliente;
     private List<Cliente> clientes = new ArrayList<>();
 
+
+
     @FXML
     protected void onConnectButtonClick() {
         try {
             if (udpCliente != null) {
-                udpCliente.cancel();  // Cancela la tarea del cliente anterior
-                udpCliente = null;    // Establece la instancia a null
+                udpCliente.cancel();
+                udpCliente = null;
             }
 
             udpCliente = new Cliente(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
             udpCliente.setClienteController(this);
+
+            bola= new Ball(imageBola);
+
             Thread clientThread = new Thread(udpCliente);
             clientThread.setDaemon(true);
             clientThread.start();
 
             connectButton.setText("Desconectar");
-            connectionStatusLabel.setText("Conectado al servidor");
         } catch (NumberFormatException e) {
             System.out.println("El puerto no es válido");
         } catch (Exception e) {
@@ -56,11 +62,9 @@ public class ClienteController {
 
 
     public void recibirPosicionPelota(double posX, double posY) {
-        Platform.runLater(() -> {
-            imageBola.setLayoutX(posX);
-            imageBola.setLayoutY(posY);
-            System.out.println("Posición de la pelota recibida: X=" + posX + ", Y=" + posY);
-        });
+        imageBola.setLayoutX(posX);
+        imageBola.setLayoutY(posY);
+        System.out.println("Posición de la pelota recibida: X=" + posX + ", Y=" + posY);
     }
 
     public List<Cliente> getClientes() {

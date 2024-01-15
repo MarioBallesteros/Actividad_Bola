@@ -12,5 +12,5 @@
   <ImageView id="imageBola" fx:id="imageBola" fitHeight="30.0" fitWidth="30.0" layoutX="272.0" layoutY="231.0" pickOnBounds="true" preserveRatio="true">
     <Image url="@ball.png" />
   </ImageView>
-  <Button id="startButton" layoutX="262.0" layoutY="328.0" onAction="#onStartButtonClick" text="Start" />
+  <Button id="startButton" fx:id="startButton" layoutX="262.0" layoutY="328.0" onAction="#onStartButtonClick" text="Start" />
 </Pane>

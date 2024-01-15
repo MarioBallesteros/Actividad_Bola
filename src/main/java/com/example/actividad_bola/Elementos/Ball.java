@@ -30,6 +30,19 @@ public class Ball extends Task<Punto> {
         });
     }
 
+    public Ball(ImageView imagenBola) {
+        this.imagenBola = imagenBola;
+        this.updatable = new Updater();
+        this.estaMoviendo=false;
+        this.punto = new Punto(imagenBola.getLayoutX(), imagenBola.getLayoutY());
+
+        valueProperty().addListener((observableValue, positions, newPosition) -> {
+            imagenBola.setLayoutX(newPosition.getX());
+            imagenBola.setLayoutY(newPosition.getY());
+            updatable.update(newPosition);
+        });
+    }
+
     public boolean estaMoviendo() {
         return estaMoviendo;
     }

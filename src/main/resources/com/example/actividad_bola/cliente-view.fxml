@@ -23,7 +23,7 @@
       <Label text="Puerto: " />
       <TextField fx:id="portTextField" />
     </HBox>
-    <Button text="Connect" onAction="#onConnectButtonClick" />
+    <Button id="connectButton" fx:id="connectButton" text="Connect" onAction="#onConnectButtonClick" />
   </VBox>
 
 </Pane>
