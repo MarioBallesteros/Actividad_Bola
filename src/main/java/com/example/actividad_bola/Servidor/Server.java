@@ -22,7 +22,6 @@ public class Server extends Task<Void> {
 
     public Server(int numPuerto){
         this.numPuerto = numPuerto;
-        this.clientes = new ArrayList<>();
     }
 
     public void setNumPuerto(int numPuerto) {
@@ -37,6 +36,7 @@ public class Server extends Task<Void> {
     protected Void call() {
         try {
             serverSocket = new DatagramSocket(numPuerto);
+            clientes = new ArrayList<>();
             System.out.printf("Creando Servidor para puerto %s.\n", numPuerto);
 
             while (true) {
@@ -89,8 +89,11 @@ public class Server extends Task<Void> {
             e.printStackTrace();
         }
     }
-
     public void setServerController(ServerController serverController) {
         this.serverController = serverController;
+    }
+
+    public List<Cliente> getClientes() {
+        return clientes;
     }
 }

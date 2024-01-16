@@ -5,9 +5,7 @@ import com.example.actividad_bola.Elementos.Ball;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
-import javafx.concurrent.Task;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ServerController {

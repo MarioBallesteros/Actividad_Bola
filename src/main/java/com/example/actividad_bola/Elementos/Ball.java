@@ -27,6 +27,7 @@ public class Ball extends Task<Punto> {
             imagenBola.setLayoutY(newPosition.getY());
             updatable.update(newPosition);
             servidor.enviarPosicionPelota(newPosition.getX(), newPosition.getY());
+            System.out.println("clientes:" + servidor.getClientes().toString());
         });
     }
 
