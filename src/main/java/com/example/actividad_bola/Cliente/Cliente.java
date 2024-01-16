@@ -29,32 +29,9 @@ public class Cliente extends Task<Void> {
     protected Void call() {
         try {
             clientSocket = new DatagramSocket();
-            System.out.printf("Creado socket de datagramas para puerto %s.\n", numPuerto);
 
             enviarMensajeAlServidor("hola",hostAddress,numPuerto);
 
-            while (true) {
-                byte[] datosRecibidos = new byte[MAX_BYTES];
-                DatagramPacket paqueteRecibido = new DatagramPacket(datosRecibidos, datosRecibidos.length);
-
-                clientSocket.receive(paqueteRecibido);
-
-                String mensaje = new String(paqueteRecibido.getData(), 0, paqueteRecibido.getLength(), COD_TEXTO);
-                InetAddress IPCliente = paqueteRecibido.getAddress();
-                int puertoCliente = paqueteRecibido.getPort();
-
-                System.out.printf("Recibido datagrama de %s:%d (%s)\n", IPCliente.getHostAddress(), puertoCliente, mensaje);
-
-                if (!clienteYaConectado(IPCliente.getHostAddress(), puertoCliente)) {
-                    System.out.printf("¡Hola! Nuevo cliente conectado desde %s:%d\n", IPCliente.getHostAddress(), puertoCliente);
-                }
-
-                String[] coordenadas = mensaje.split(",");
-                double posX = Double.parseDouble(coordenadas[0]);
-                double posY = Double.parseDouble(coordenadas[1]);
-
-                Platform.runLater(() -> clienteController.recibirPosicionPelota(posX, posY));
-            }
         } catch (IOException ex) {
             System.out.println("Excepción de E/S en el cliente UDP");
             ex.printStackTrace();
@@ -88,6 +65,11 @@ public class Cliente extends Task<Void> {
         this.clienteController = clienteController;
     }
 
+    public InetAddress getIpCliente() {
+        return clientSocket.getInetAddress();
+    }
+
+    get
     public ClienteController getClienteController() {
         return clienteController;
     }

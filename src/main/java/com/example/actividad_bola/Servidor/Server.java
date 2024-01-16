@@ -1,6 +1,7 @@
 package com.example.actividad_bola.Servidor;
 
 import com.example.actividad_bola.Cliente.Cliente;
+import com.example.actividad_bola.Elementos.Punto;
 import javafx.concurrent.Task;
 
 import java.io.IOException;
@@ -66,8 +67,23 @@ public class Server extends Task<Void> {
         clientes.add(cliente);
     }
     public void enviarPosicionPelota(double posX, double posY) {
-        for (Cliente cliente : clientes) {
-            cliente.getClienteController().recibirPosicionPelota(posX,posY);
+        if (clientes!=null){
+            for (Cliente cliente : clientes) {
+                enviarMensajeAlCliente(cliente.getIpCliente(),cliente);
+            }
+        }
+    }
+
+    public void enviarMensajeAlCliente(String clienteIP, int clientePuerto,double posX,double posY) {
+        try {
+            InetAddress servidorAddress = InetAddress.getByName(clienteIP);
+            String bPunto = posX + ","+ posY;
+            byte[] bMensaje = bPunto.getBytes();
+            DatagramPacket paqueteMensaje = new DatagramPacket(bMensaje, bMensaje.length, servidorAddress, clientePuerto);
+            serverSocket.send(paqueteMensaje);
+        } catch (IOException e) {
+            System.out.println("Error al enviar mensaje al servidor");
+            e.printStackTrace();
         }
     }
 
