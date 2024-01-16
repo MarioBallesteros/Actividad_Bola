@@ -39,6 +39,7 @@ public class Server extends Task<Void> {
             serverSocket = new DatagramSocket(numPuerto);
             System.out.printf("Creando Servidor para puerto %s.\n", numPuerto);
 
+            while (true) {
                 byte[] datosRecibidos = new byte[MAX_BYTES];
                 DatagramPacket paqueteRecibido = new DatagramPacket(datosRecibidos, datosRecibidos.length);
 
@@ -52,6 +53,7 @@ public class Server extends Task<Void> {
                 clientes.add(cliente);
 
                 onClientConnected(cliente);
+            }
         } catch (IOException ex) {
             System.out.println("Excepción de E/S en el servidor UDP");
             ex.printStackTrace();
@@ -60,33 +62,33 @@ public class Server extends Task<Void> {
     }
 
     public void onClientConnected(Cliente cliente) {
-        System.out.println("Nuevo cliente conectado: " + cliente.getMessage());
+        System.out.println("Nuevo cliente conectado: " + cliente.getIpCliente());
     }
 
     public void addCliente(Cliente cliente) {
         clientes.add(cliente);
     }
+
     public void enviarPosicionPelota(double posX, double posY) {
-        if (clientes!=null){
+        if (clientes != null) {
             for (Cliente cliente : clientes) {
-                enviarMensajeAlCliente(cliente.getIpCliente(),cliente);
+                enviarMensajeAlCliente(cliente.getIpCliente().getHostAddress(), cliente.getPuerto(), posX, posY);
             }
         }
     }
 
-    public void enviarMensajeAlCliente(String clienteIP, int clientePuerto,double posX,double posY) {
+    public void enviarMensajeAlCliente(String clienteIP, int clientePuerto, double posX, double posY) {
         try {
-            InetAddress servidorAddress = InetAddress.getByName(clienteIP);
-            String bPunto = posX + ","+ posY;
-            byte[] bMensaje = bPunto.getBytes();
-            DatagramPacket paqueteMensaje = new DatagramPacket(bMensaje, bMensaje.length, servidorAddress, clientePuerto);
+            InetAddress clienteAddress = InetAddress.getByName(clienteIP);
+            String mensaje = posX + "," + posY;
+            byte[] bMensaje = mensaje.getBytes(COD_TEXTO);
+            DatagramPacket paqueteMensaje = new DatagramPacket(bMensaje, bMensaje.length, clienteAddress, clientePuerto);
             serverSocket.send(paqueteMensaje);
         } catch (IOException e) {
-            System.out.println("Error al enviar mensaje al servidor");
+            System.out.println("Error al enviar mensaje al cliente");
             e.printStackTrace();
         }
     }
-
 
     public void setServerController(ServerController serverController) {
         this.serverController = serverController;

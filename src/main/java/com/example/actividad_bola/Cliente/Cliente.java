@@ -66,10 +66,13 @@ public class Cliente extends Task<Void> {
     }
 
     public InetAddress getIpCliente() {
-        return clientSocket.getInetAddress();
+        return clientSocket.getLocalAddress();
     }
 
-    get
+    public int getPuerto() {
+        return numPuerto;
+    }
+
     public ClienteController getClienteController() {
         return clienteController;
     }
