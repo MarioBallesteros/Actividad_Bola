@@ -82,5 +82,9 @@ public class Ball extends Task<Punto> {
             // System.out.println("stop");
         }
     }
+
+    public Server getServidor() {
+        return servidor;
+    }
 }
 

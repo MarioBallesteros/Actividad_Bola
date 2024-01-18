@@ -28,43 +28,46 @@ public class ClienteController {
     private Button connectButton;
 
     private Cliente udpCliente;
-    private List<Cliente> clientes = new ArrayList<>();
+    private boolean connected = false;
+    private Thread clientThread;
 
 
 
     @FXML
     protected void onConnectButtonClick() {
-        try {
-            if (udpCliente != null) {
-                udpCliente.cancel();
-                udpCliente = null;
-            }
+        if (connectButton.getText().equals("Connect")) {
+            try {
+                if (udpCliente != null) {
+                    udpCliente.cancel();
+                    udpCliente = null;
+                }
+                udpCliente = new Cliente(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
+                udpCliente.setClienteController(this);
+                bola = new Ball(imageBola);
 
-            udpCliente = new Cliente(ipTextField.getText(), Integer.parseInt(portTextField.getText()));
-            udpCliente.setClienteController(this);
-
-            bola= new Ball(imageBola);
-
-            Thread clientThread = new Thread(udpCliente);
-            clientThread.setDaemon(true);
-            clientThread.start();
-
-            connectButton.setText("Desconectar");
-        } catch (NumberFormatException e) {
+                clientThread = new Thread(udpCliente);
+                clientThread.setDaemon(true);
+                clientThread.start();
+                connectButton.setText("Desconectar");
+                connected = true;
+            } catch (NumberFormatException e) {
             System.out.println("El puerto no es válido");
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+        }else {
+            udpCliente.enviarMensajeAlServidor("baja," +udpCliente.getPuerto(),udpCliente.getIpCliente().getHostAddress(), udpCliente.getPuerto());
+            System.out.println("Cliente borrado correctamente");
+            connectButton.setText("Connect");
+        }
     }
+
 
 
     public void recibirPosicionPelota(double posX, double posY) {
         imageBola.setLayoutX(posX);
         imageBola.setLayoutY(posY);
-        System.out.println("Posición de la pelota recibida: X=" + posX + ", Y=" + posY);
+        //System.out.println("Posición de la pelota recibida: X=" + posX + ", Y=" + posY);
     }
 
-    public List<Cliente> getClientes() {
-        return clientes;
-    }
 }

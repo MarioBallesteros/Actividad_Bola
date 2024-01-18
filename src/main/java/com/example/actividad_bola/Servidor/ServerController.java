@@ -28,7 +28,7 @@ public class ServerController {
     protected void onStartButtonClick() {
         bola.setMoviendo(!bola.estaMoviendo());
 
-        if (!bola.estaMoviendo()) {
+        if (bola.estaMoviendo()) {
             Thread hiloServidor = new Thread(servidor);
             Thread hiloBola = new Thread(bola);
             hiloBola.setDaemon(true);

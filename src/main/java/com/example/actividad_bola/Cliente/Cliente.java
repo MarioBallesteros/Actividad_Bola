@@ -39,8 +39,7 @@ public class Cliente extends Task<Void> {
     protected Void call() {
         try {
             enviarMensajeAlServidor("Hola soy:", hostAddress, numPuerto);
-            System.out.println("Mensaje enviado");
-
+            System.out.println("Conectado correctamente");
             while (true) {
                 byte[] datosRecibidos = new byte[MAX_BYTES];
                 DatagramPacket paqueteRecibido = new DatagramPacket(datosRecibidos, datosRecibidos.length);
@@ -51,13 +50,13 @@ public class Cliente extends Task<Void> {
                 InetAddress IPCliente = paqueteRecibido.getAddress();
                 int puertoCliente = paqueteRecibido.getPort();
 
-                System.out.printf("Recibido datagrama de %s:%d (%s)\n", IPCliente.getHostAddress(), puertoCliente, mensaje);
+                //System.out.printf("Recibido datagrama de %s:%d (%s)\n", IPCliente.getHostAddress(), puertoCliente, mensaje);
 
                 String[] coordenadas = mensaje.split(",");
                 double posX = Double.parseDouble(coordenadas[0]);
                 double posY = Double.parseDouble(coordenadas[1]);
 
-                System.out.printf("Mensaje recibido del servidor: %s\n", mensaje);
+                //System.out.printf("Mensaje recibido del servidor: %s\n", mensaje);
                 clienteController.recibirPosicionPelota(posX,posY);
             }
         } catch (IOException ex) {
@@ -73,6 +72,7 @@ public class Cliente extends Task<Void> {
 
     public void enviarMensajeAlServidor(String mensaje, String servidorIP, int servidorPuerto) {
         try {
+            System.out.println("por aqui");
             InetAddress servidorAddress = InetAddress.getByName(servidorIP);
             byte[] bMensaje = mensaje.getBytes(COD_TEXTO);
             DatagramPacket paqueteMensaje = new DatagramPacket(bMensaje, bMensaje.length, servidorAddress, servidorPuerto);
@@ -82,7 +82,6 @@ public class Cliente extends Task<Void> {
             e.printStackTrace();
         }
     }
-
 
     public void setClienteController(ClienteController clienteController) {
         this.clienteController = clienteController;
@@ -96,4 +95,6 @@ public class Cliente extends Task<Void> {
         return numPuerto;
     }
 
+
 }
+

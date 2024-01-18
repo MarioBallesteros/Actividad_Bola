@@ -65,6 +65,10 @@ public class Server extends Task<Void> {
         System.out.println("Nuevo cliente conectado: " + cliente.getIpCliente());
     }
 
+    public void onClientDesconnected(Cliente cliente){
+        System.out.println("Cliente Desconectado: "+ cliente.getIpCliente());
+    }
+
     public void addCliente(Cliente cliente) {
         clientes.add(cliente);
     }
@@ -95,5 +99,14 @@ public class Server extends Task<Void> {
 
     public List<Cliente> getClientes() {
         return clientes;
+    }
+
+    public void borrarCliente(int puerto) {
+        for (Cliente c:clientes) {
+            if (c.getPuerto() == puerto){
+                clientes.remove(c);
+                System.out.println("Cliente borrado con puerto : "+puerto+" con exito");
+            }
+        }
     }
 }
