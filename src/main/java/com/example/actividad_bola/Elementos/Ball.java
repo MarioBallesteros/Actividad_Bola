@@ -20,14 +20,13 @@ public class Ball extends Task<Punto> {
         this.estaMoviendo=false;
         this.punto = new Punto(imagenBola.getLayoutX(), imagenBola.getLayoutY());
         this.servidor = servidor;
-        //System.out.println("X: "+imagenBola.getLayoutX() +" Y:"+imagenBola.getLayoutY());
 
         valueProperty().addListener((observableValue, positions, newPosition) -> {
             imagenBola.setLayoutX(newPosition.getX());
             imagenBola.setLayoutY(newPosition.getY());
             updatable.update(newPosition);
             servidor.enviarPosicionPelota(newPosition.getX(), newPosition.getY());
-            System.out.println("clientes:" + servidor.getClientes().toString());
+            //System.out.println("clientes:" + servidor.getClientes().toString());
         });
     }
 

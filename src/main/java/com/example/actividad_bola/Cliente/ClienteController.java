@@ -27,9 +27,6 @@ public class ClienteController {
     @FXML
     private Button connectButton;
 
-    @FXML
-    private Label connectionStatusLabel;
-
     private Cliente udpCliente;
     private List<Cliente> clientes = new ArrayList<>();
 

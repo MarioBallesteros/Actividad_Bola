@@ -49,11 +49,9 @@ public class ServerController {
 
     }
 
-        public void setClientes(List<Cliente> clientes) {
+    public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
     }
 
-    public void onClientConnected(Cliente cliente) {
-        System.out.println("Nuevo cliente conectado: " + cliente.getMessage());
-    }
+
 }

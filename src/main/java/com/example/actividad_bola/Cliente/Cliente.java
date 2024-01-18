@@ -19,7 +19,6 @@ public class Cliente extends Task<Void> {
     private final static String COD_TEXTO = "UTF-8";
 
     private DatagramSocket clientSocket;
-    private InetAddress ipCliente;
     private int numPuerto;
     private String hostAddress;
     private ClienteController clienteController;
@@ -39,7 +38,7 @@ public class Cliente extends Task<Void> {
     @Override
     protected Void call() {
         try {
-            enviarMensajeAlServidor("hola", hostAddress, numPuerto);
+            enviarMensajeAlServidor("Hola soy:", hostAddress, numPuerto);
             System.out.println("Mensaje enviado");
 
             while (true) {
@@ -54,7 +53,6 @@ public class Cliente extends Task<Void> {
 
                 System.out.printf("Recibido datagrama de %s:%d (%s)\n", IPCliente.getHostAddress(), puertoCliente, mensaje);
 
-                // Parsea el mensaje para obtener las coordenadas (ejemplo)
                 String[] coordenadas = mensaje.split(",");
                 double posX = Double.parseDouble(coordenadas[0]);
                 double posY = Double.parseDouble(coordenadas[1]);
@@ -71,11 +69,6 @@ public class Cliente extends Task<Void> {
             }
         }
         return null;
-    }
-
-
-    private boolean clienteYaConectado(String hostAddress, int puerto) {
-        return false;
     }
 
     public void enviarMensajeAlServidor(String mensaje, String servidorIP, int servidorPuerto) {
@@ -103,7 +96,4 @@ public class Cliente extends Task<Void> {
         return numPuerto;
     }
 
-    public ClienteController getClienteController() {
-        return clienteController;
-    }
 }
